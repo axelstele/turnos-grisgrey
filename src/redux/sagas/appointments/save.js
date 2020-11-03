@@ -1,16 +1,18 @@
 import {
-  all, takeLatest, call, put,
+  all, takeLatest, call, put, select,
 } from 'redux-saga/effects';
-import { appointments } from '../reducers/appointments';
-import { global } from '../reducers/global';
-import rsf from '../rsf';
+import { global } from 'redux/reducers/global';
+import { appointments } from 'redux/reducers/appointments';
+import { uidSelector } from 'redux/selectors/user';
+import rsf from '../../rsf';
 
 function* callSaveAppointment({ payload }) {
   const { title, endDate, startDate } = payload;
   try {
     yield put(global.showLoader());
-
+    const uid = yield select(uidSelector);
     yield call(rsf.database.create, 'appointments', {
+      uid,
       title,
       startDate: startDate.toUTCString(),
       endDate: endDate.toUTCString(),

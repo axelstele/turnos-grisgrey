@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, shallowEqual, useSelector } from 'react-redux';
 import './App.css';
-import CustomScheduler from './components/custom-scheduler';
-import CustomLoader from './components/custom-loader';
+import CustomLoader from 'components/custom-loader';
+import { user } from 'redux/reducers/user';
+import Routes from 'routes';
+import { dataSelector } from 'redux/selectors/user';
 
-function App() {
+const App = () => {
+  const dispatch = useDispatch();
+  const userData = useSelector(dataSelector, shallowEqual);
+
+  useEffect(() => {
+    dispatch(user.sync());
+  }, [userData]);
+
   return (
     <>
       <CustomLoader />
-      <CustomScheduler />
+      <Routes />
     </>
   );
-}
+};
 
 export default App;

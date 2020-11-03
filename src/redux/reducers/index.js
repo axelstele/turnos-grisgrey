@@ -1,9 +1,13 @@
 /* eslint-disable import/no-named-as-default */
 import { combineReducers } from 'redux';
+import { connectRouter } from 'connected-react-router';
 import appointments from './appointments';
 import global from './global';
+import user from './user';
 
-export default combineReducers({
+export default (history) => combineReducers({
+  router: connectRouter(history),
   appointments,
   global,
+  user,
 });

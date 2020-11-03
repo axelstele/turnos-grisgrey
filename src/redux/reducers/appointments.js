@@ -7,6 +7,7 @@ const getError = createAction('appointments/getError');
 const save = createAction('appointments/save');
 const saveSuccess = createAction('appointments/saveSuccess');
 const saveError = createAction('appointments/saveError');
+const sync = createAction('appointments/sync');
 
 export const appointments = {
   get,
@@ -15,6 +16,7 @@ export const appointments = {
   save,
   saveSuccess,
   saveError,
+  sync,
 };
 
 const slice = createSlice({

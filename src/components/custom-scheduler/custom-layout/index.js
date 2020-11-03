@@ -13,7 +13,7 @@ import Notes from '@material-ui/icons/Notes';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
 import { useDispatch } from 'react-redux';
-import { appointments } from '../../../redux/reducers/appointments';
+import { appointments } from 'redux/reducers/appointments';
 import useStyles from './styles';
 
 const CustomOverlay = ({
