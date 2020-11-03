@@ -12,17 +12,18 @@ import {
   AppointmentTooltip,
   DateNavigator,
 } from '@devexpress/dx-react-scheduler-material-ui';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { connectProps } from '@devexpress/dx-react-core';
-import { appointments } from '../../redux/reducers/appointments';
+import { appointments } from 'redux/reducers/appointments';
+import { formattedDataSelector } from 'redux/selectors/appointments';
 import CustomLayout from './custom-layout';
 
 const CustomScheduler = () => {
   const dispatch = useDispatch();
   const [addedAppointment, setAddedAppointment] = useState({});
   const [formAppointmentVisible, setFormAppointmentVisible] = useState(false);
-  const appointmentsData = useSelector((state) => state.appointments?.data);
+  const appointmentsData = useSelector(formattedDataSelector, shallowEqual);
 
   const handleAddedAppointmentChange = (added) => {
     setFormAppointmentVisible(true);
