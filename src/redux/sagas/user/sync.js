@@ -7,23 +7,19 @@ import { global } from 'redux/reducers/global';
 import rsf from '../../rsf';
 
 function* callSync() {
-  try {
-    const channel = yield call(rsf.auth.channel);
-    yield put(global.showLoader());
-    while (true) {
-      const response = yield take(channel);
-      if (response.user) {
-        yield put(user.logInSuccess(response.user));
-        yield put(push('/home'));
-        return;
-      }
-      yield put(user.logInSuccess(null));
-      yield put(push('/'));
+  yield put(global.showLoader());
+  const channel = yield call(rsf.auth.channel);
+  while (true) {
+    const response = yield take(channel);
+    if (response.user) {
+      yield put(user.logInSuccess(response.user));
+      yield put(push('/home'));
+      return;
     }
-  } catch (error) {
-    console.log(error);
+    yield put(user.logInSuccess(null));
+    yield put(global.hideLoader());
+    yield put(push('/'));
   }
-  yield put(global.hideLoader());
 }
 
 export default function* watchSync() {
