@@ -15,9 +15,11 @@ import {
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { connectProps } from '@devexpress/dx-react-core';
-import { appointments } from 'redux/reducers/appointments';
+import { calendar } from 'redux/reducers/calendar';
 import { formattedDataSelector } from 'redux/selectors/appointments';
 import CustomLayout from './custom-layout';
+import Tooltip from './tooltip';
+import Appointment from './appointment';
 
 const CustomScheduler = () => {
   const dispatch = useDispatch();
@@ -31,7 +33,7 @@ const CustomScheduler = () => {
   };
 
   useEffect(() => {
-    dispatch(appointments.get());
+    dispatch(calendar.get());
   }, []);
 
   return (
@@ -54,8 +56,14 @@ const CustomScheduler = () => {
         />
         <Toolbar />
         <ViewSwitcher />
-        <Appointments />
-        <AppointmentTooltip />
+        <Appointments
+          appointmentComponent={Appointment}
+        />
+        <AppointmentTooltip
+          contentComponent={Tooltip}
+          showOpenButton
+          showCloseButton
+        />
         <AppointmentForm
           overlayComponent={connectProps(CustomLayout, () => ({
             appointmentData: addedAppointment,

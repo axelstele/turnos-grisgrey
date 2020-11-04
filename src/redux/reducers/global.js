@@ -1,25 +1,36 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAction } from '@reduxjs/toolkit';
 
-const showLoader = createAction('global/showLoader');
+const hideDrawer = createAction('global/hideDrawer');
 const hideLoader = createAction('global/hideLoader');
+const showDrawer = createAction('global/showDrawer');
+const showLoader = createAction('global/showLoader');
 
 export const global = {
-  showLoader,
+  hideDrawer,
   hideLoader,
+  showDrawer,
+  showLoader,
 };
 
 const slice = createSlice({
   name: 'global',
   initialState: {
     isLoading: false,
+    openDrawer: false,
   },
   reducers: {
-    showLoader: (state) => {
-      state.isLoading = true;
+    hideDrawer: (state) => {
+      state.openDrawer = false;
     },
     hideLoader: (state) => {
       state.isLoading = false;
+    },
+    showDrawer: (state) => {
+      state.openDrawer = true;
+    },
+    showLoader: (state) => {
+      state.isLoading = true;
     },
   },
 });

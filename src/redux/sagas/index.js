@@ -5,6 +5,9 @@ import watchSyncAppointments from './appointments/sync';
 import watchLogInUser from './user/login';
 import watchLogOutUser from './user/logout';
 import watchSyncUser from './user/sync';
+import watchGetProfessionals from './professionals/get';
+import watchAddProfessional from './professionals/add';
+import watchGetCalendar from './calendar/get';
 
 export default function* rootSaga() {
   yield all([
@@ -14,5 +17,8 @@ export default function* rootSaga() {
     fork(watchLogInUser),
     fork(watchLogOutUser),
     fork(watchSyncUser),
+    fork(watchGetProfessionals),
+    fork(watchAddProfessional),
+    fork(watchGetCalendar),
   ]);
 }

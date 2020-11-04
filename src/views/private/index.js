@@ -7,6 +7,8 @@ import {
 } from 'react-router-dom';
 import { shallowEqual, useSelector } from 'react-redux';
 import { dataSelector } from 'redux/selectors/user';
+import CustomNavbar from 'components/custom-navbar';
+import CustomDrawer from 'components/custom-drawer';
 
 const PrivateRoute = ({
   component: Comp, path, ...rest
@@ -18,7 +20,11 @@ const PrivateRoute = ({
       path={path}
       {...rest}
       render={(props) => (userData ? (
-        <Comp {...props} />
+        <>
+          <CustomNavbar />
+          <CustomDrawer />
+          <Comp {...props} />
+        </>
       ) : (
         <Redirect to={{ pathname: '/' }} />
       ))}

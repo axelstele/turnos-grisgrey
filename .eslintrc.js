@@ -21,6 +21,7 @@ module.exports = {
   rules: {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/require-default-props': [1, { forbidDefaultForRequired: false, ignoreFunctionalComponents: true }],
+    'linebreak-style': 0,
   },
   settings: {
     'import/resolver': {

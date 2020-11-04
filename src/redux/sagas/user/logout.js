@@ -10,8 +10,8 @@ function* callLogOut() {
     yield put(global.showLoader());
     yield call(rsf.auth.signOut);
     yield put(user.logOutSuccess());
-  } catch (error) {
-    console.log(error);
+  } catch {
+    // TODO handle error
   }
   yield put(global.hideLoader());
 }
