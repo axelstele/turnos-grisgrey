@@ -9,6 +9,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { user } from 'redux/reducers/user';
+import { global } from 'redux/reducers/global';
 import useStyles from './styles';
 
 export default function MenuAppBar() {
@@ -25,6 +26,10 @@ export default function MenuAppBar() {
     setAnchorEl(null);
   };
 
+  const handleDrawerOpen = () => {
+    dispatch(global.showDrawer());
+  };
+
   const handleLogOut = () => {
     setAnchorEl(null);
     dispatch(user.logOut());
@@ -34,7 +39,7 @@ export default function MenuAppBar() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleDrawerOpen}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>

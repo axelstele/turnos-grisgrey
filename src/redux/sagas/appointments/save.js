@@ -1,24 +1,24 @@
 import {
-  all, takeLatest, call, put, select,
+  all, takeLatest, call, put,
 } from 'redux-saga/effects';
 import { global } from 'redux/reducers/global';
 import { appointments } from 'redux/reducers/appointments';
-import { uidSelector } from 'redux/selectors/user';
 import rsf from '../../rsf';
 
 function* callSaveAppointment({ payload }) {
-  const { title, endDate, startDate } = payload;
+  const {
+    title, endDate, startDate, professional,
+  } = payload;
   try {
     yield put(global.showLoader());
-    const uid = yield select(uidSelector);
     yield call(rsf.database.create, 'appointments', {
-      uid,
       title,
       startDate: startDate.toUTCString(),
       endDate: endDate.toUTCString(),
+      professional,
     });
-  } catch (error) {
-    console.log(error);
+  } catch {
+    // TODO handle error
   }
   yield put(global.hideLoader());
 }

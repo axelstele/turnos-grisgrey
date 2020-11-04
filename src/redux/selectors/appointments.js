@@ -10,7 +10,7 @@ export const dataSelector = createSelector(
 export const formattedDataSelector = createSelector(
   dataSelector,
   (data) => {
-    const parsedAppointments = Object.keys(data).reduce((acc, id) => {
+    const parsedAppointments = data && Object.keys(data).reduce((acc, id) => {
       const appointment = {
         ...data[id],
         id,
@@ -19,6 +19,6 @@ export const formattedDataSelector = createSelector(
     }, []);
 
     // eslint-disable-next-line max-len
-    return parsedAppointments.map((appointment) => ({ ...appointment, startDate: Date.parse(appointment.startDate) }));
+    return parsedAppointments?.map((appointment) => ({ ...appointment, startDate: Date.parse(appointment.startDate) }));
   },
 );

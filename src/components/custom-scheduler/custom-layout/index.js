@@ -12,18 +12,25 @@ import MomentUtils from '@date-io/moment';
 import Notes from '@material-ui/icons/Notes';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { appointments } from 'redux/reducers/appointments';
+import MenuItem from '@material-ui/core/MenuItem';
+import Person from '@material-ui/icons/Person';
+import { formattedDataSelector } from 'redux/selectors/professionals';
 import useStyles from './styles';
 
 const CustomOverlay = ({
-  appointmentData: { startDate, endDate, title }, setFormAppointmentVisible, target, visible,
+  appointmentData: {
+    startDate, endDate, title, professional,
+  }, setFormAppointmentVisible, target, visible,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [selectedProfessional, setSelectedProfessional] = useState(professional || '');
   const [formStartDate, setFormStartDate] = useState(startDate);
   const [formEndDate, setFormEndDate] = useState(endDate);
   const [formTitle, setFormTitle] = useState(title);
+  const professionalsData = useSelector(formattedDataSelector, shallowEqual);
 
   const handleClose = () => {
     setFormAppointmentVisible(!visible);
@@ -31,8 +38,19 @@ const CustomOverlay = ({
 
   const handleCommitChanges = () => {
     dispatch(appointments.save({
-      title: formTitle, startDate: formStartDate, endDate: formEndDate,
+      title: formTitle,
+      startDate: formStartDate,
+      endDate: formEndDate,
+      professional: selectedProfessional,
     }));
+  };
+
+  const handleHide = () => {
+    setSelectedProfessional(null);
+    setFormStartDate(startDate);
+    setFormEndDate(endDate);
+    setFormTitle(title);
+    handleClose();
   };
 
   const pickerEditorProps = () => ({
@@ -52,6 +70,8 @@ const CustomOverlay = ({
     <AppointmentForm.Overlay
       visible={visible}
       target={target}
+      fullSize={false}
+      onHide={handleHide}
     >
       <div>
         <div className={classes.header}>
@@ -68,18 +88,33 @@ const CustomOverlay = ({
             <TextField value={formTitle} onChange={({ target: { value } }) => setFormTitle(value)} {...textEditorProps('title')} />
           </div>
           <div className={classes.wrapper}>
+            <Person className={classes.icon} color="action" />
+            <TextField
+              select
+              value={selectedProfessional}
+              onChange={({ target: { value } }) => setSelectedProfessional(value)}
+              {...textEditorProps('professional')}
+            >
+              {professionalsData?.map((item) => (
+                <MenuItem value={item.id} key={item.id}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          </div>
+          <div className={classes.wrapper}>
             <CalendarToday className={classes.icon} color="action" />
             <MuiPickersUtilsProvider utils={MomentUtils}>
               <KeyboardDateTimePicker
                 inputValue={moment(formStartDate).format('DD/MM/YYYY HH:mm')}
                 label="Start Date"
-                onChange={(date) => setFormStartDate(date)}
+                onChange={setFormStartDate}
                 {...pickerEditorProps()}
               />
               <KeyboardDateTimePicker
                 inputValue={moment(formEndDate).format('DD/MM/YYYY HH:mm')}
                 label="End Date"
-                onChange={(date) => setFormEndDate(date)}
+                onChange={setFormEndDate}
                 {...pickerEditorProps()}
               />
             </MuiPickersUtilsProvider>
@@ -109,10 +144,10 @@ const CustomOverlay = ({
 };
 
 CustomOverlay.propTypes = {
-  appointmentData: PropTypes.objectOf(),
+  appointmentData: PropTypes.objectOf(PropTypes.object),
   handleCommitChanges: PropTypes.func,
   setFormAppointmentVisible: PropTypes.func,
-  target: PropTypes.objectOf(),
+  target: PropTypes.objectOf(PropTypes.object),
   visible: PropTypes.bool,
 };
 

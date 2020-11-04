@@ -10,8 +10,8 @@ function* callLogIn({ payload }) {
   try {
     yield put(global.showLoader());
     yield call(rsf.auth.signInWithEmailAndPassword, email, password);
-  } catch (error) {
-    console.log(error);
+  } catch {
+    // TODO handle error
   }
   yield put(global.hideLoader());
 }
