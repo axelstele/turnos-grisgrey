@@ -3,6 +3,8 @@ import {
 } from 'redux-saga/effects';
 import { user } from 'redux/reducers/user';
 import { global } from 'redux/reducers/global';
+import { push } from 'connected-react-router';
+import { LOGIN_PATHNAME } from 'constants/routes';
 import rsf from '../../rsf';
 
 function* callLogOut() {
@@ -10,6 +12,7 @@ function* callLogOut() {
     yield put(global.showLoader());
     yield call(rsf.auth.signOut);
     yield put(user.logOutSuccess());
+    yield put(push(LOGIN_PATHNAME));
   } catch {
     // TODO handle error
   }

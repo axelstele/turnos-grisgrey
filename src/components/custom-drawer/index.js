@@ -10,6 +10,7 @@ import Group from '@material-ui/icons/Group';
 import { openDrawerSelector } from 'redux/selectors/global';
 import { global } from 'redux/reducers/global';
 import { Link } from 'react-router-dom';
+import { HOME_PATHNAME, PROFESSIONALS_PATHNAME } from 'constants/routes';
 import useStyles from './styles';
 
 const CustomDrawer = () => {
@@ -34,11 +35,11 @@ const CustomDrawer = () => {
         onKeyDown={handleListClick}
       >
         <List>
-          <ListItem button component={Link} to="/home">
+          <ListItem button component={Link} to={HOME_PATHNAME}>
             <ListItemIcon><Today /></ListItemIcon>
             <ListItemText primary="Calendar" />
           </ListItem>
-          <ListItem button component={Link} to="/professionals">
+          <ListItem button component={Link} to={PROFESSIONALS_PATHNAME}>
             <ListItemIcon><Group /></ListItemIcon>
             <ListItemText primary="Professionals" />
           </ListItem>

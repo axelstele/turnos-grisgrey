@@ -6,3 +6,8 @@ export const openDrawerSelector = createSelector(
   globalSelector,
   (global) => global?.openDrawer,
 );
+
+export const isLoadingSelector = createSelector(
+  globalSelector,
+  (global) => global?.isLoading,
+);
