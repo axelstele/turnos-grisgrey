@@ -23,13 +23,18 @@ import Appointment from './appointment';
 
 const CustomScheduler = () => {
   const dispatch = useDispatch();
-  const [addedAppointment, setAddedAppointment] = useState({});
-  const [formAppointmentVisible, setFormAppointmentVisible] = useState(false);
+  const [appointment, setAppointment] = useState({});
+  const [appointmentFormVisible, setAppointmentFormVisible] = useState(false);
   const appointmentsData = useSelector(formattedDataSelector, shallowEqual);
 
-  const handleAddedAppointmentChange = (added) => {
-    setFormAppointmentVisible(true);
-    setAddedAppointment(added);
+  const handleAppointmentOpen = (appointmentData) => {
+    setAppointment(appointmentData);
+    setAppointmentFormVisible(!appointmentFormVisible);
+  };
+
+  const handleAppointmentFormClose = () => {
+    setAppointment({});
+    setAppointmentFormVisible(!appointmentFormVisible);
   };
 
   useEffect(() => {
@@ -40,7 +45,8 @@ const CustomScheduler = () => {
     <Paper>
       <Scheduler data={appointmentsData}>
         <EditingState
-          onAddedAppointmentChange={handleAddedAppointmentChange}
+          onAddedAppointmentChange={handleAppointmentOpen}
+          onEditingAppointmentChange={handleAppointmentOpen}
         />
         <ViewState
           defaultCurrentDate={moment().format('YYYY-MM-DD')}
@@ -63,12 +69,13 @@ const CustomScheduler = () => {
           contentComponent={Tooltip}
           showOpenButton
           showCloseButton
+          showDeleteButton
         />
         <AppointmentForm
           overlayComponent={connectProps(CustomLayout, () => ({
-            appointmentData: addedAppointment,
-            setFormAppointmentVisible,
-            visible: formAppointmentVisible,
+            appointmentData: appointment,
+            handleClose: handleAppointmentFormClose,
+            visible: appointmentFormVisible,
           }))}
         />
         <DateNavigator />
