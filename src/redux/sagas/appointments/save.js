@@ -11,19 +11,19 @@ function* callSaveAppointment({ payload }) {
     title, endDate, startDate, description, professional,
   } = payload;
   try {
-    let parsedEndDate = endDate;
+    yield put(global.showLoader());
     let parsedStartDate = startDate;
+    let parsedEndDate = endDate;
     if (moment.isMoment(startDate)) {
-      parsedStartDate = moment(startDate).toDate().toUTCString();
+      parsedStartDate = moment(startDate).toDate();
     }
     if (moment.isMoment(endDate)) {
-      parsedEndDate = moment(endDate).toDate().toUTCString();
+      parsedEndDate = moment(endDate).toDate();
     }
-    yield put(global.showLoader());
     yield call(rsf.database.create, 'appointments', {
       title,
-      startDate: parsedStartDate,
-      endDate: parsedEndDate,
+      startDate: parsedStartDate.toUTCString(),
+      endDate: parsedEndDate.toUTCString(),
       description,
       professional,
     });

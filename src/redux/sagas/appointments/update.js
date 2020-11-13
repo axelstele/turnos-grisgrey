@@ -13,13 +13,13 @@ function* callUpdateAppointment({ payload }) {
   try {
     let parsedEndDate = endDate;
     if (moment.isMoment(endDate)) {
-      parsedEndDate = moment(endDate).toDate().toUTCString();
+      parsedEndDate = moment(endDate).toDate();
     }
     yield put(global.showLoader());
     yield call(rsf.database.update, `appointments/${id}`, {
       title,
       startDate: new Date(startDate).toUTCString(),
-      endDate: parsedEndDate,
+      endDate: parsedEndDate.toUTCString(),
       description,
       professional,
     });
