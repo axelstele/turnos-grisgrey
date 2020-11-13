@@ -51,6 +51,7 @@ const CustomOverlay = ({
         professional: selectedProfessional,
       }));
     }
+    handleClose();
   };
 
   const pickerEditorProps = () => ({

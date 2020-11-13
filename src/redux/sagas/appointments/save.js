@@ -3,6 +3,7 @@ import {
 } from 'redux-saga/effects';
 import { global } from 'redux/reducers/global';
 import { appointments } from 'redux/reducers/appointments';
+import moment from 'moment';
 import rsf from '../../rsf';
 
 function* callSaveAppointment({ payload }) {
@@ -10,11 +11,19 @@ function* callSaveAppointment({ payload }) {
     title, endDate, startDate, description, professional,
   } = payload;
   try {
+    let parsedEndDate = endDate;
+    let parsedStartDate = startDate;
+    if (moment.isMoment(startDate)) {
+      parsedStartDate = moment(startDate).toDate().toUTCString();
+    }
+    if (moment.isMoment(endDate)) {
+      parsedEndDate = moment(endDate).toDate().toUTCString();
+    }
     yield put(global.showLoader());
     yield call(rsf.database.create, 'appointments', {
       title,
-      startDate: startDate.toUTCString(),
-      endDate: endDate.toUTCString(),
+      startDate: parsedStartDate,
+      endDate: parsedEndDate,
       description,
       professional,
     });
