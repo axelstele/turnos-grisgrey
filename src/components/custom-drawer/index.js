@@ -1,19 +1,19 @@
 import React from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import {
+  Drawer, List, ListItem, ListItemIcon, ListItemText,
+} from '@material-ui/core';
 import Today from '@material-ui/icons/Today';
 import Group from '@material-ui/icons/Group';
 import { openDrawerSelector } from 'redux/selectors/global';
 import { global } from 'redux/reducers/global';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { HOME_PATHNAME, PROFESSIONALS_PATHNAME } from 'constants/routes';
+import { CALENDAR_TEXT, PROFESSIONALS_TEXT } from 'constants/custom-drawer';
 import useStyles from './styles';
 
 const CustomDrawer = () => {
+  const history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch();
   const openDrawer = useSelector(openDrawerSelector, shallowEqual);
@@ -35,13 +35,23 @@ const CustomDrawer = () => {
         onKeyDown={handleListClick}
       >
         <List>
-          <ListItem button component={Link} to={HOME_PATHNAME}>
+          <ListItem
+            button
+            component={Link}
+            selected={history?.location.pathname === HOME_PATHNAME}
+            to={HOME_PATHNAME}
+          >
             <ListItemIcon><Today /></ListItemIcon>
-            <ListItemText primary="Calendar" />
+            <ListItemText primary={CALENDAR_TEXT} />
           </ListItem>
-          <ListItem button component={Link} to={PROFESSIONALS_PATHNAME}>
+          <ListItem
+            button
+            component={Link}
+            selected={history?.location.pathname === PROFESSIONALS_PATHNAME}
+            to={PROFESSIONALS_PATHNAME}
+          >
             <ListItemIcon><Group /></ListItemIcon>
-            <ListItemText primary="Professionals" />
+            <ListItemText primary={PROFESSIONALS_TEXT} />
           </ListItem>
         </List>
       </div>

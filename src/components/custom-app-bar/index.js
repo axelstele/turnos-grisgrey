@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
 import { user } from 'redux/reducers/user';
 import { global } from 'redux/reducers/global';
+import { LOG_OUT_TEXT } from 'constants/custom-app-bar';
+import {
+  AppBar, IconButton, Menu, MenuItem, Toolbar, Typography,
+} from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import formatTitle from 'utils/custom-app-bar';
 import useStyles from './styles';
 
-export default function MenuAppBar() {
+const CustomAppBar = () => {
+  const history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -37,13 +38,13 @@ export default function MenuAppBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleDrawerOpen}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Home
+            {formatTitle(history?.location.pathname)}
           </Typography>
           <div>
             <IconButton
@@ -70,11 +71,13 @@ export default function MenuAppBar() {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleLogOut}>Cerrar sesión</MenuItem>
+              <MenuItem onClick={handleLogOut}>{LOG_OUT_TEXT}</MenuItem>
             </Menu>
           </div>
         </Toolbar>
       </AppBar>
     </div>
   );
-}
+};
+
+export default CustomAppBar;

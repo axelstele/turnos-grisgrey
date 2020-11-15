@@ -19,6 +19,7 @@ import { connectProps } from '@devexpress/dx-react-core';
 import { calendar } from 'redux/reducers/calendar';
 import { formattedDataSelector } from 'redux/selectors/appointments';
 import { appointments } from 'redux/reducers/appointments';
+import { DAY_VIEW_TEXT, WEEK_VIEW_TEXT } from 'constants/custom-scheduler';
 import CustomOverlay from './custom-overlay';
 import Tooltip from './tooltip';
 import Appointment from './appointment';
@@ -51,7 +52,10 @@ const CustomScheduler = () => {
 
   return (
     <Paper>
-      <Scheduler data={appointmentsData}>
+      <Scheduler
+        data={appointmentsData}
+        locale="es-AR"
+      >
         <EditingState
           onAddedAppointmentChange={handleAppointmentOpen}
           onCommitChanges={handleCommitChanges}
@@ -60,15 +64,17 @@ const CustomScheduler = () => {
         <IntegratedEditing />
         <ViewState
           defaultCurrentDate={moment().format('YYYY-MM-DD')}
-          defaultCurrentViewName="Week"
+          defaultCurrentViewName={WEEK_VIEW_TEXT}
         />
         <DayView
-          startDayHour={8}
           endDayHour={20}
+          name={DAY_VIEW_TEXT}
+          startDayHour={8}
         />
         <WeekView
-          startDayHour={8}
           endDayHour={20}
+          name={WEEK_VIEW_TEXT}
+          startDayHour={8}
         />
         <Toolbar />
         <ViewSwitcher />

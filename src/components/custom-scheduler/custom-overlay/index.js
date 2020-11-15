@@ -16,6 +16,15 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { appointments } from 'redux/reducers/appointments';
 import Person from '@material-ui/icons/Person';
 import { formattedDataSelector } from 'redux/selectors/professionals';
+import {
+  CREATE_BUTTON_TEXT,
+  DESCRIPTION_TEXT,
+  END_DATE_TEXT,
+  PROFESSIONAL_TEXT,
+  START_DATE_TEXT,
+  TITLE_TEXT,
+  UPDATE_BUTTON_TEXT,
+} from 'constants/home';
 import useStyles from './styles';
 
 const CustomOverlay = ({
@@ -54,11 +63,12 @@ const CustomOverlay = ({
     handleClose();
   };
 
-  const pickerEditorProps = () => ({
+  const pickerEditorProps = (field) => ({
     ampm: false,
     className: classes.picker,
     format: 'DD/MM/YYYY HH:mm',
     inputVariant: 'outlined',
+    label: field[0].toUpperCase() + field.slice(1),
   });
 
   const textEditorProps = (field) => ({
@@ -94,7 +104,11 @@ const CustomOverlay = ({
       <div className={classes.content}>
         <div className={classes.wrapper}>
           <Create className={classes.icon} color="action" />
-          <TextField value={formTitle} onChange={({ target: { value } }) => setFormTitle(value)} {...textEditorProps('title')} />
+          <TextField
+            value={formTitle}
+            onChange={({ target: { value } }) => setFormTitle(value)}
+            {...textEditorProps(TITLE_TEXT)}
+          />
         </div>
         <div className={classes.wrapper}>
           <Person className={classes.icon} color="action" />
@@ -102,7 +116,7 @@ const CustomOverlay = ({
             select
             value={selectedProfessional}
             onChange={({ target: { value } }) => setSelectedProfessional(value)}
-            {...textEditorProps('professional')}
+            {...textEditorProps(PROFESSIONAL_TEXT)}
           >
             {professionalsData?.map((item) => (
               <MenuItem value={item.id} key={item.id}>
@@ -116,22 +130,20 @@ const CustomOverlay = ({
           <MuiPickersUtilsProvider utils={MomentUtils}>
             <KeyboardDateTimePicker
               inputValue={moment(formStartDate).format('DD/MM/YYYY HH:mm')}
-              label="Start Date"
               onChange={setFormStartDate}
-              {...pickerEditorProps()}
+              {...pickerEditorProps(START_DATE_TEXT)}
             />
             <KeyboardDateTimePicker
               inputValue={moment(formEndDate).format('DD/MM/YYYY HH:mm')}
-              label="End Date"
               onChange={setFormEndDate}
-              {...pickerEditorProps()}
+              {...pickerEditorProps(END_DATE_TEXT)}
             />
           </MuiPickersUtilsProvider>
         </div>
         <div className={classes.wrapper}>
           <Notes className={classes.icon} color="action" />
           <TextField
-            {...textEditorProps('description')}
+            {...textEditorProps(DESCRIPTION_TEXT)}
             multiline
             onChange={({ target: { value } }) => setFormDescription(value)}
             rows="6"
@@ -147,7 +159,7 @@ const CustomOverlay = ({
           onClick={handleCommitChanges}
           variant="outlined"
         >
-          {id ? 'Update' : 'Create'}
+          {id ? UPDATE_BUTTON_TEXT : CREATE_BUTTON_TEXT}
         </Button>
       </div>
     </AppointmentForm.Overlay>

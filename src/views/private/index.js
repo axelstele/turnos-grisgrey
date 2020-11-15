@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { Route } from 'react-router-dom';
-import CustomNavbar from 'components/custom-navbar';
+import CustomAppBar from 'components/custom-app-bar';
 import CustomDrawer from 'components/custom-drawer';
 import { useSelector, shallowEqual } from 'react-redux';
 import { dataSelector } from 'redux/selectors/user';
@@ -22,9 +22,11 @@ const PrivateRoute = ({
       {...rest}
       render={(props) => (
         <>
-          <CustomNavbar />
+          <CustomAppBar />
           <CustomDrawer />
-          <Comp {...props} />
+          <div style={{ marginTop: 64 }}>
+            <Comp {...props} />
+          </div>
         </>
       )}
     />
