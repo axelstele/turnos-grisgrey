@@ -10,21 +10,21 @@ function* callUpdateAppointment({ payload }) {
   const {
     id, title, endDate, startDate, description, professional,
   } = payload;
+  yield put(global.showLoader());
   try {
     let parsedEndDate = endDate;
     if (moment.isMoment(endDate)) {
-      parsedEndDate = moment(endDate).toDate();
+      parsedEndDate = moment(endDate).toDate().toUTCString();
     }
-    yield put(global.showLoader());
     yield call(rsf.database.update, `appointments/${id}`, {
       title,
       startDate: new Date(startDate).toUTCString(),
-      endDate: parsedEndDate.toUTCString(),
+      endDate: parsedEndDate,
       description,
       professional,
     });
-  } catch {
-    // TODO handle error
+  } catch (error) {
+    console.log(error);
   }
   yield put(global.hideLoader());
 }

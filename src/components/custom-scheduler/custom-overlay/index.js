@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
 import {
@@ -28,8 +28,8 @@ const CustomOverlay = ({
   const [selectedProfessional, setSelectedProfessional] = useState(professional || '');
   const [formStartDate, setFormStartDate] = useState(startDate);
   const [formEndDate, setFormEndDate] = useState(endDate);
-  const [formTitle, setFormTitle] = useState(title);
-  const [formDescription, setFormDescription] = useState(description);
+  const [formTitle, setFormTitle] = useState(title || '');
+  const [formDescription, setFormDescription] = useState(description || '');
   const professionalsData = useSelector(formattedDataSelector, shallowEqual);
 
   const handleCommitChanges = () => {
@@ -65,6 +65,12 @@ const CustomOverlay = ({
     variant: 'outlined',
     label: field[0].toUpperCase() + field.slice(1),
     className: classes.textField,
+  });
+
+  useEffect(() => {
+    if (!selectedProfessional && professionalsData?.length) {
+      setSelectedProfessional(professionalsData[0].id);
+    }
   });
 
   if (!visible) {
@@ -135,10 +141,11 @@ const CustomOverlay = ({
       </div>
       <div className={classes.buttonGroup}>
         <Button
-          variant="outlined"
-          color="primary"
           className={classes.button}
+          color="primary"
+          disabled={!formStartDate || !formEndDate || !formTitle}
           onClick={handleCommitChanges}
+          variant="outlined"
         >
           {id ? 'Update' : 'Create'}
         </Button>

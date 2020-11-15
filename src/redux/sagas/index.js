@@ -1,5 +1,6 @@
 import { all, fork } from 'redux-saga/effects';
 import watchGetAppointments from './appointments/get';
+import watchRemoveAppointment from './appointments/remove';
 import watchSaveAppointment from './appointments/save';
 import watchSyncAppointments from './appointments/sync';
 import watchUpdateAppointment from './appointments/update';
@@ -13,6 +14,7 @@ import watchGetCalendar from './calendar/get';
 export default function* rootSaga() {
   yield all([
     fork(watchGetAppointments),
+    fork(watchRemoveAppointment),
     fork(watchSaveAppointment),
     fork(watchUpdateAppointment),
     fork(watchSyncAppointments),

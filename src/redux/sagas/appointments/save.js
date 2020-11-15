@@ -27,8 +27,8 @@ function* callSaveAppointment({ payload }) {
       description,
       professional,
     });
-  } catch {
-    // TODO handle error
+  } catch (error) {
+    console.log(error);
   }
   yield put(global.hideLoader());
 }

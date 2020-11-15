@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
-import { ViewState, EditingState } from '@devexpress/dx-react-scheduler';
+import { EditingState, IntegratedEditing, ViewState } from '@devexpress/dx-react-scheduler';
 import {
-  Scheduler,
-  DayView,
-  WeekView,
+  AppointmentForm,
   Appointments,
+  AppointmentTooltip,
+  ConfirmationDialog,
+  DateNavigator,
+  DayView,
+  Scheduler,
   Toolbar,
   ViewSwitcher,
-  AppointmentForm,
-  AppointmentTooltip,
-  DateNavigator,
+  WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { connectProps } from '@devexpress/dx-react-core';
 import { calendar } from 'redux/reducers/calendar';
 import { formattedDataSelector } from 'redux/selectors/appointments';
-import CustomLayout from './custom-layout';
+import { appointments } from 'redux/reducers/appointments';
+import CustomOverlay from './custom-overlay';
 import Tooltip from './tooltip';
 import Appointment from './appointment';
 
@@ -28,13 +30,19 @@ const CustomScheduler = () => {
   const appointmentsData = useSelector(formattedDataSelector, shallowEqual);
 
   const handleAppointmentOpen = (appointmentData) => {
-    setAppointment(appointmentData);
-    setAppointmentFormVisible(!appointmentFormVisible);
+    if (appointmentData && Object.keys(appointmentData).length) {
+      setAppointment(appointmentData);
+      setAppointmentFormVisible(!appointmentFormVisible);
+    }
   };
 
   const handleAppointmentFormClose = () => {
-    setAppointment({});
     setAppointmentFormVisible(!appointmentFormVisible);
+    setAppointment({});
+  };
+
+  const handleCommitChanges = ({ deleted }) => {
+    dispatch(appointments.remove({ id: deleted }));
   };
 
   useEffect(() => {
@@ -46,8 +54,10 @@ const CustomScheduler = () => {
       <Scheduler data={appointmentsData}>
         <EditingState
           onAddedAppointmentChange={handleAppointmentOpen}
+          onCommitChanges={handleCommitChanges}
           onEditingAppointmentChange={handleAppointmentOpen}
         />
+        <IntegratedEditing />
         <ViewState
           defaultCurrentDate={moment().format('YYYY-MM-DD')}
           defaultCurrentViewName="Week"
@@ -62,6 +72,7 @@ const CustomScheduler = () => {
         />
         <Toolbar />
         <ViewSwitcher />
+        <ConfirmationDialog />
         <Appointments
           appointmentComponent={Appointment}
         />
@@ -71,13 +82,15 @@ const CustomScheduler = () => {
           showCloseButton
           showDeleteButton
         />
+        {appointment && (
         <AppointmentForm
-          overlayComponent={connectProps(CustomLayout, () => ({
+          overlayComponent={connectProps(CustomOverlay, () => ({
             appointmentData: appointment,
             handleClose: handleAppointmentFormClose,
             visible: appointmentFormVisible,
           }))}
         />
+        )}
         <DateNavigator />
       </Scheduler>
     </Paper>

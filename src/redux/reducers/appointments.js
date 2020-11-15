@@ -4,6 +4,9 @@ import { createSlice, createAction } from '@reduxjs/toolkit';
 const get = createAction('appointments/get');
 const getSuccess = createAction('appointments/getSuccess');
 const getError = createAction('appointments/getError');
+const remove = createAction('appointments/remove');
+const removeSuccess = createAction('appointments/removeSuccess');
+const removeError = createAction('appointments/removeError');
 const save = createAction('appointments/save');
 const saveSuccess = createAction('appointments/saveSuccess');
 const saveError = createAction('appointments/saveError');
@@ -13,6 +16,9 @@ const updateSuccess = createAction('appointments/updateSuccess');
 const updateError = createAction('appointments/updateError');
 
 export const appointments = {
+  remove,
+  removeSuccess,
+  removeError,
   get,
   getSuccess,
   getError,
