@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { professionals } from 'redux/reducers/professionals';
-import { formattedDataSelector } from 'redux/selectors/professionals';
-import AddEditDialog from './add-edit-dialog';
+import { formattedDataSelector } from 'redux/selectors/practices';
+import { practices } from 'redux/reducers/practices';
 import Grid from './grid';
 import Menu from './menu';
+import AddEditDialog from './add-edit-dialog';
 
-const Professionals = () => {
+const Practices = () => {
   const dispatch = useDispatch();
-  const professionalsData = useSelector(formattedDataSelector, shallowEqual);
+  const practicesData = useSelector(formattedDataSelector, shallowEqual);
   const [selectedRows, setSelectedRows] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogType, setDialogType] = useState(null);
@@ -29,12 +29,12 @@ const Professionals = () => {
   };
 
   useEffect(() => {
-    dispatch(professionals.get());
+    dispatch(practices.get());
   }, []);
 
   useEffect(() => {
     setSelectedRows([]);
-  }, [professionalsData]);
+  }, [practicesData]);
 
   return (
     <>
@@ -50,4 +50,4 @@ const Professionals = () => {
   );
 };
 
-export default Professionals;
+export default Practices;

@@ -19,7 +19,9 @@ import { connectProps } from '@devexpress/dx-react-core';
 import { calendar } from 'redux/reducers/calendar';
 import { formattedDataSelector } from 'redux/selectors/appointments';
 import { appointments } from 'redux/reducers/appointments';
-import { DAY_VIEW_TEXT, WEEK_VIEW_TEXT } from 'constants/custom-scheduler';
+import {
+  DAY_VIEW_TEXT, WEEK_VIEW_TEXT, CANCEL_DELETE_TEXT, MESSAGE_DELETE_TEXT, CONFIRM_DELETE_TEXT,
+} from 'constants/custom-scheduler';
 import CustomOverlay from './custom-overlay';
 import Tooltip from './tooltip';
 import Appointment from './appointment';
@@ -78,7 +80,13 @@ const CustomScheduler = () => {
         />
         <Toolbar />
         <ViewSwitcher />
-        <ConfirmationDialog />
+        <ConfirmationDialog
+          messages={{
+            cancelButton: CANCEL_DELETE_TEXT,
+            confirmDeleteMessage: MESSAGE_DELETE_TEXT,
+            deleteButton: CONFIRM_DELETE_TEXT,
+          }}
+        />
         <Appointments
           appointmentComponent={Appointment}
         />

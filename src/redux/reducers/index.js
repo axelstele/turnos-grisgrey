@@ -5,13 +5,15 @@ import appointments from './appointments';
 import global from './global';
 import user from './user';
 import professionals from './professionals';
+import practices from './practices';
 import calendar from './calendar';
 
 export default (history) => combineReducers({
   router: connectRouter(history),
   appointments,
-  global,
-  user,
-  professionals,
   calendar,
+  global,
+  practices,
+  professionals,
+  user,
 });

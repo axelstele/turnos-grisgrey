@@ -5,11 +5,13 @@ import {
 } from '@material-ui/core';
 import Today from '@material-ui/icons/Today';
 import Group from '@material-ui/icons/Group';
+import PanToolIcon from '@material-ui/icons/PanTool';
 import { openDrawerSelector } from 'redux/selectors/global';
 import { global } from 'redux/reducers/global';
 import { Link, useHistory } from 'react-router-dom';
-import { HOME_PATHNAME, PROFESSIONALS_PATHNAME } from 'constants/routes';
-import { CALENDAR_TEXT, PROFESSIONALS_TEXT } from 'constants/custom-drawer';
+import { HOME_PATHNAME, PRACTICES_PATHNAME, PROFESSIONALS_PATHNAME } from 'constants/routes';
+import { CALENDAR_TEXT, PRACTICES_TEXT, PROFESSIONALS_TEXT } from 'constants/custom-drawer';
+
 import useStyles from './styles';
 
 const CustomDrawer = () => {
@@ -52,6 +54,15 @@ const CustomDrawer = () => {
           >
             <ListItemIcon><Group /></ListItemIcon>
             <ListItemText primary={PROFESSIONALS_TEXT} />
+          </ListItem>
+          <ListItem
+            button
+            component={Link}
+            selected={history?.location.pathname === PRACTICES_PATHNAME}
+            to={PRACTICES_PATHNAME}
+          >
+            <ListItemIcon><PanToolIcon /></ListItemIcon>
+            <ListItemText primary={PRACTICES_TEXT} />
           </ListItem>
         </List>
       </div>

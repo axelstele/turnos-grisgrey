@@ -8,38 +8,44 @@ import {
 import Close from '@material-ui/icons/Close';
 import Create from '@material-ui/icons/Create';
 import CalendarToday from '@material-ui/icons/CalendarToday';
-import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import Notes from '@material-ui/icons/Notes';
 import moment from 'moment';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { appointments } from 'redux/reducers/appointments';
 import Person from '@material-ui/icons/Person';
-import { formattedDataSelector } from 'redux/selectors/professionals';
+import { formattedDataSelector as formattedPracticesDataSelector } from 'redux/selectors/practices';
+import { formattedDataSelector as formattedProfessionalsDataSelector } from 'redux/selectors/professionals';
+
 import {
   CREATE_BUTTON_TEXT,
   DESCRIPTION_TEXT,
   END_DATE_TEXT,
+  PRACTICES_TEXT,
   PROFESSIONAL_TEXT,
   START_DATE_TEXT,
   TITLE_TEXT,
   UPDATE_BUTTON_TEXT,
 } from 'constants/home';
+import PanToolIcon from '@material-ui/icons/PanTool';
 import useStyles from './styles';
 
 const CustomOverlay = ({
   appointmentData: {
-    id, startDate, endDate, title, professional, description,
+    id, startDate, endDate, title, practices, professional, description,
   }, handleClose, target, visible,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [selectedPractices, setSelectedPractices] = useState(practices || []);
   const [selectedProfessional, setSelectedProfessional] = useState(professional || '');
   const [formStartDate, setFormStartDate] = useState(startDate);
   const [formEndDate, setFormEndDate] = useState(endDate);
   const [formTitle, setFormTitle] = useState(title || '');
   const [formDescription, setFormDescription] = useState(description || '');
-  const professionalsData = useSelector(formattedDataSelector, shallowEqual);
+  const practicesData = useSelector(formattedPracticesDataSelector, shallowEqual);
+  const professionalsData = useSelector(formattedProfessionalsDataSelector, shallowEqual);
 
   const handleCommitChanges = () => {
     if (id) {
@@ -50,6 +56,7 @@ const CustomOverlay = ({
         endDate: formEndDate,
         description: formDescription,
         professional: selectedProfessional,
+        practices: selectedPractices,
       }));
     } else {
       dispatch(appointments.save({
@@ -58,17 +65,34 @@ const CustomOverlay = ({
         endDate: formEndDate,
         description: formDescription,
         professional: selectedProfessional,
+        practices: selectedPractices,
       }));
     }
     handleClose();
+  };
+
+  const handleDescriptionChange = ({ target: { value } }) => {
+    setFormDescription(value);
+  };
+
+  const handlePracticesChange = ({ target: { value } }) => {
+    setSelectedPractices(value);
+  };
+
+  const handleProfessionalChange = ({ target: { value } }) => {
+    setSelectedProfessional(value);
+  };
+
+  const handleTitleChange = ({ target: { value } }) => {
+    setFormTitle(value);
   };
 
   const pickerEditorProps = (field) => ({
     ampm: false,
     className: classes.picker,
     format: 'DD/MM/YYYY HH:mm',
-    inputVariant: 'outlined',
     label: field[0].toUpperCase() + field.slice(1),
+    variant: 'inline',
   });
 
   const textEditorProps = (field) => ({
@@ -106,7 +130,7 @@ const CustomOverlay = ({
           <Create className={classes.icon} color="action" />
           <TextField
             value={formTitle}
-            onChange={({ target: { value } }) => setFormTitle(value)}
+            onChange={handleTitleChange}
             {...textEditorProps(TITLE_TEXT)}
           />
         </div>
@@ -115,7 +139,7 @@ const CustomOverlay = ({
           <TextField
             select
             value={selectedProfessional}
-            onChange={({ target: { value } }) => setSelectedProfessional(value)}
+            onChange={handleProfessionalChange}
             {...textEditorProps(PROFESSIONAL_TEXT)}
           >
             {professionalsData?.map((item) => (
@@ -128,24 +152,42 @@ const CustomOverlay = ({
         <div className={classes.wrapper}>
           <CalendarToday className={classes.icon} color="action" />
           <MuiPickersUtilsProvider utils={MomentUtils}>
-            <KeyboardDateTimePicker
-              inputValue={moment(formStartDate).format('DD/MM/YYYY HH:mm')}
+            <DateTimePicker
+              value={moment(formStartDate)}
               onChange={setFormStartDate}
               {...pickerEditorProps(START_DATE_TEXT)}
             />
-            <KeyboardDateTimePicker
-              inputValue={moment(formEndDate).format('DD/MM/YYYY HH:mm')}
+            <DateTimePicker
+              value={moment(formEndDate)}
               onChange={setFormEndDate}
               {...pickerEditorProps(END_DATE_TEXT)}
             />
           </MuiPickersUtilsProvider>
         </div>
         <div className={classes.wrapper}>
+          <PanToolIcon className={classes.icon} color="action" />
+          <TextField
+            select
+            SelectProps={{
+              multiple: true,
+              value: selectedPractices,
+              onChange: handlePracticesChange,
+            }}
+            {...textEditorProps(PRACTICES_TEXT)}
+          >
+            {practicesData?.map((item) => (
+              <MenuItem value={item.id} key={item.id}>
+                {item.description}
+              </MenuItem>
+            ))}
+          </TextField>
+        </div>
+        <div className={classes.wrapper}>
           <Notes className={classes.icon} color="action" />
           <TextField
             {...textEditorProps(DESCRIPTION_TEXT)}
             multiline
-            onChange={({ target: { value } }) => setFormDescription(value)}
+            onChange={handleDescriptionChange}
             rows="6"
             value={formDescription}
           />
@@ -179,8 +221,9 @@ CustomOverlay.propTypes = {
       PropTypes.string,
     ]),
     description: PropTypes.string,
-    title: PropTypes.string,
+    practices: PropTypes.arrayOf(PropTypes.string),
     professional: PropTypes.string,
+    title: PropTypes.string,
   }),
   handleCommitChanges: PropTypes.func,
   handleClose: PropTypes.func,

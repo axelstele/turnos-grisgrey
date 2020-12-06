@@ -5,15 +5,12 @@ import { global } from 'redux/reducers/global';
 import { professionals } from 'redux/reducers/professionals';
 import rsf from '../../rsf';
 
-function* callAddProfessional({ payload }) {
-  const { name, surname, color } = payload;
+function* callRemoveProfessionals({ payload }) {
+  const { selectedRows } = payload;
+
   try {
     yield put(global.showLoader());
-    yield call(rsf.database.create, 'professionals', {
-      name,
-      surname,
-      color,
-    });
+    yield all(selectedRows.map((professional) => call(rsf.database.delete, `professionals/${professional.id}`)));
     yield put(professionals.get());
   } catch {
     // TODO handle error
@@ -21,6 +18,6 @@ function* callAddProfessional({ payload }) {
   yield put(global.hideLoader());
 }
 
-export default function* watchAddProfessional() {
-  yield all([takeLatest(professionals.add.type, callAddProfessional)]);
+export default function* watchRemoveProfessionals() {
+  yield all([takeLatest(professionals.remove.type, callRemoveProfessionals)]);
 }

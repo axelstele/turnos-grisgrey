@@ -8,7 +8,7 @@ import rsf from '../../rsf';
 
 function* callUpdateAppointment({ payload }) {
   const {
-    id, title, endDate, startDate, description, professional,
+    id, title, endDate, startDate, description, professional, practices,
   } = payload;
   yield put(global.showLoader());
   try {
@@ -22,6 +22,7 @@ function* callUpdateAppointment({ payload }) {
       endDate: parsedEndDate,
       description,
       professional,
+      practices,
     });
   } catch (error) {
     console.log(error);

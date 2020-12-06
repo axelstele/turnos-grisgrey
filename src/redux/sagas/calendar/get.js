@@ -5,14 +5,16 @@ import { calendar } from 'redux/reducers/calendar';
 import { appointments } from 'redux/reducers/appointments';
 import { callGetAppointments } from 'redux/sagas/appointments/get';
 import { callGetProfessionals } from 'redux/sagas/professionals/get';
+import { callGetPractices } from 'redux/sagas/practices/get';
 import { global } from 'redux/reducers/global';
 
 function* callGetCalendar() {
+  yield put(global.showLoader());
   try {
-    yield put(global.showLoader());
     yield all([
       call(callGetAppointments),
       call(callGetProfessionals),
+      call(callGetPractices),
     ]);
   } catch {
     // TODO handle error
