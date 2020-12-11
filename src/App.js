@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import './App.css';
 import CustomLoader from 'components/custom-loader';
 import Routes from 'routes';
 import { user } from 'redux/reducers/user';

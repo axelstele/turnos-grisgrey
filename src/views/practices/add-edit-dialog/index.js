@@ -6,7 +6,7 @@ import {
   Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField,
 } from '@material-ui/core';
 import {
-  ADD_PRACTICE_TEXT, CANCEL_BUTTON_TEXT, CONFIRM_BUTTON_TEXT, EDIT_PRACTICE_TEXT,
+  ADD_PRACTICE_TEXT, CANCEL_BUTTON_TEXT, CONFIRM_BUTTON_TEXT, DESCRIPTION_TEXT, EDIT_PRACTICE_TEXT,
 } from 'constants/practices';
 
 const AddEditDialog = ({
@@ -56,7 +56,7 @@ const AddEditDialog = ({
           autoFocus
           margin="dense"
           id="description"
-          label="Description"
+          label={DESCRIPTION_TEXT}
           type="text"
           fullWidth
           value={description}

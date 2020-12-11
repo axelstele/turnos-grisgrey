@@ -38,7 +38,7 @@ const CustomAppBar = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed">
+      <AppBar className={classes.appbar} position="fixed">
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleDrawerOpen}>
             <MenuIcon />

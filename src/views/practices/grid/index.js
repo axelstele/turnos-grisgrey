@@ -4,6 +4,7 @@ import { DataGrid } from '@material-ui/data-grid';
 import { useSelector, shallowEqual } from 'react-redux';
 import { formattedDataSelector } from 'redux/selectors/practices';
 import { columns } from 'constants/practices';
+import sortAlphabeticallyByField from 'utils/arrays';
 import useStyles from './styles';
 
 const Grid = ({ handleRowSelected }) => {
@@ -15,8 +16,9 @@ const Grid = ({ handleRowSelected }) => {
       <DataGrid
         checkboxSelection
         columns={columns}
+        disableSelectionOnClick
         onRowSelected={handleRowSelected}
-        rows={practicesData}
+        rows={sortAlphabeticallyByField(practicesData, 'description')}
       />
     </div>
   );
