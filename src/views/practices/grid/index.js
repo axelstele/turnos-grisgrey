@@ -5,14 +5,13 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { formattedDataSelector } from 'redux/selectors/practices';
 import { columns } from 'constants/practices';
 import sortAlphabeticallyByField from 'utils/arrays';
-import useStyles from './styles';
+import GridContainer from 'components/grid-container';
 
 const Grid = ({ handleRowSelected }) => {
-  const classes = useStyles();
   const practicesData = useSelector(formattedDataSelector, shallowEqual);
 
   return (
-    <div className={classes.container}>
+    <GridContainer>
       <DataGrid
         checkboxSelection
         columns={columns}
@@ -20,7 +19,8 @@ const Grid = ({ handleRowSelected }) => {
         onRowSelected={handleRowSelected}
         rows={sortAlphabeticallyByField(practicesData, 'description')}
       />
-    </div>
+    </GridContainer>
+
   );
 };
 

@@ -6,9 +6,8 @@ import { CirclePicker } from 'react-color';
 import {
   Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField,
 } from '@material-ui/core';
-import {
-  ADD_PROFESSIONAL_TEXT, CANCEL_BUTTON_TEXT, CONFIRM_BUTTON_TEXT, EDIT_PROFESSIONAL_TEXT,
-} from 'constants/professionals';
+import { ADD_PROFESSIONAL_TEXT, EDIT_PROFESSIONAL_TEXT } from 'constants/professionals';
+import { CANCEL_BUTTON_TEXT, CONFIRM_BUTTON_TEXT } from 'constants/global';
 import useStyles from './styles';
 
 const AddEditDialog = ({

@@ -29,6 +29,7 @@ import {
   UPDATE_BUTTON_TEXT,
 } from 'constants/home';
 import PanToolIcon from '@material-ui/icons/PanTool';
+import sortAlphabeticallyByField from 'utils/arrays';
 import useStyles from './styles';
 
 const CustomOverlay = ({
@@ -142,7 +143,7 @@ const CustomOverlay = ({
             onChange={handleProfessionalChange}
             {...textEditorProps(PROFESSIONAL_TEXT)}
           >
-            {professionalsData?.map((item) => (
+            {sortAlphabeticallyByField(professionalsData, 'name')?.map((item) => (
               <MenuItem value={item.id} key={item.id}>
                 {item.name}
               </MenuItem>
@@ -175,7 +176,7 @@ const CustomOverlay = ({
             }}
             {...textEditorProps(PRACTICES_TEXT)}
           >
-            {practicesData?.map((item) => (
+            {sortAlphabeticallyByField(practicesData, 'description')?.map((item) => (
               <MenuItem value={item.id} key={item.id}>
                 {item.description}
               </MenuItem>

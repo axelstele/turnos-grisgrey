@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { formattedDataSelector } from 'redux/selectors/practices';
 import { practices } from 'redux/reducers/practices';
+import { DELETE_PRACTICE_TEXT } from 'constants/practices';
 import Grid from './grid';
-import Menu from './menu';
+import GridMenu from '../../components/grid-menu';
 import AddEditDialog from './add-edit-dialog';
 
 const Practices = () => {
@@ -12,6 +13,10 @@ const Practices = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogType, setDialogType] = useState(null);
+
+  const handleConfirmRemove = () => {
+    dispatch(practices.remove({ selectedRows }));
+  };
 
   const handleOpenDialog = (type) => {
     setDialogType(type);
@@ -38,7 +43,12 @@ const Practices = () => {
 
   return (
     <>
-      <Menu handleOpenDialog={handleOpenDialog} selectedRows={selectedRows} />
+      <GridMenu
+        dialogText={DELETE_PRACTICE_TEXT}
+        handleConfirmRemove={handleConfirmRemove}
+        handleOpenDialog={handleOpenDialog}
+        selectedRows={selectedRows}
+      />
       <Grid handleRowSelected={handleRowSelected} />
       <AddEditDialog
         dialogType={dialogType}

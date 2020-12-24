@@ -2,8 +2,6 @@ import React from 'react';
 import Lens from '@material-ui/icons/Lens';
 
 export const ADD_PROFESSIONAL_TEXT = 'Agregar profesional';
-export const CANCEL_BUTTON_TEXT = 'Cancelar';
-export const CONFIRM_BUTTON_TEXT = 'Confirmar';
 export const DELETE_PROFFESIONAL_TEXT = '¿Está seguro que desea eliminar el/los profesional/es?';
 export const EDIT_PROFESSIONAL_TEXT = 'Editar profesional';
 

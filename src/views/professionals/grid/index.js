@@ -4,21 +4,20 @@ import { DataGrid } from '@material-ui/data-grid';
 import { useSelector, shallowEqual } from 'react-redux';
 import { formattedDataSelector } from 'redux/selectors/professionals';
 import { columns } from 'constants/professionals';
-import useStyles from './styles';
+import GridContainer from 'components/grid-container';
 
 const Grid = ({ handleRowSelected }) => {
-  const classes = useStyles();
   const professionalsData = useSelector(formattedDataSelector, shallowEqual);
 
   return (
-    <div className={classes.container}>
+    <GridContainer>
       <DataGrid
         checkboxSelection
         columns={columns}
         onRowSelected={handleRowSelected}
         rows={professionalsData}
       />
-    </div>
+    </GridContainer>
   );
 };
 

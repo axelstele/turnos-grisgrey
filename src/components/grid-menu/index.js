@@ -7,7 +7,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import useStyles from './styles';
 import DeleteDialog from './delete-dialog';
 
-const Menu = ({ handleOpenDialog, selectedRows }) => {
+const GridMenu = ({
+  dialogText, handleConfirmRemove, handleOpenDialog, selectedRows,
+}) => {
   const classes = useStyles();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -33,6 +35,8 @@ const Menu = ({ handleOpenDialog, selectedRows }) => {
         )}
       </div>
       <DeleteDialog
+        dialogText={dialogText}
+        handleConfirmRemove={handleConfirmRemove}
         handleShowDeleteDialog={handleShowDeleteDialog}
         selectedRows={selectedRows}
         showDeleteDialog={showDeleteDialog}
@@ -41,9 +45,11 @@ const Menu = ({ handleOpenDialog, selectedRows }) => {
   );
 };
 
-Menu.propTypes = {
+GridMenu.propTypes = {
+  dialogText: PropTypes.string,
+  handleConfirmRemove: PropTypes.func,
   handleOpenDialog: PropTypes.func,
   selectedRows: PropTypes.arrayOf(PropTypes.object),
 };
 
-export default Menu;
+export default GridMenu;

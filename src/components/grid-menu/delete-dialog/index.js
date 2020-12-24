@@ -3,15 +3,13 @@ import PropTypes from 'prop-types';
 import {
   Button, Dialog, DialogActions, DialogContent, DialogContentText,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { professionals } from 'redux/reducers/professionals';
-import { CANCEL_BUTTON_TEXT, CONFIRM_BUTTON_TEXT, DELETE_PROFFESIONAL_TEXT } from 'constants/professionals';
+import { CANCEL_BUTTON_TEXT, CONFIRM_BUTTON_TEXT } from 'constants/global';
 
-const DeleteDialog = ({ handleShowDeleteDialog, selectedRows, showDeleteDialog }) => {
-  const dispatch = useDispatch();
-
+const DeleteDialog = ({
+  dialogText, handleConfirmRemove, handleShowDeleteDialog, showDeleteDialog,
+}) => {
   const handleConfirm = () => {
-    dispatch(professionals.remove({ selectedRows }));
+    handleConfirmRemove();
     handleShowDeleteDialog();
   };
 
@@ -28,7 +26,7 @@ const DeleteDialog = ({ handleShowDeleteDialog, selectedRows, showDeleteDialog }
     >
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {DELETE_PROFFESIONAL_TEXT}
+          {dialogText}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -44,8 +42,9 @@ const DeleteDialog = ({ handleShowDeleteDialog, selectedRows, showDeleteDialog }
 };
 
 DeleteDialog.propTypes = {
+  dialogText: PropTypes.string,
+  handleConfirmRemove: PropTypes.func,
   handleShowDeleteDialog: PropTypes.func,
-  selectedRows: PropTypes.arrayOf(PropTypes.object),
   showDeleteDialog: PropTypes.bool,
 };
 

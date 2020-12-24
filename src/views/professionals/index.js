@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { professionals } from 'redux/reducers/professionals';
 import { formattedDataSelector } from 'redux/selectors/professionals';
+import { DELETE_PROFFESIONAL_TEXT } from 'constants/professionals';
+import GridMenu from 'components/grid-menu';
 import AddEditDialog from './add-edit-dialog';
 import Grid from './grid';
-import Menu from './menu';
 
 const Professionals = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,10 @@ const Professionals = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogType, setDialogType] = useState(null);
+
+  const handleConfirmRemove = () => {
+    dispatch(professionals.remove({ selectedRows }));
+  };
 
   const handleOpenDialog = (type) => {
     setDialogType(type);
@@ -38,7 +43,12 @@ const Professionals = () => {
 
   return (
     <>
-      <Menu handleOpenDialog={handleOpenDialog} selectedRows={selectedRows} />
+      <GridMenu
+        dialogText={DELETE_PROFFESIONAL_TEXT}
+        handleConfirmRemove={handleConfirmRemove}
+        handleOpenDialog={handleOpenDialog}
+        selectedRows={selectedRows}
+      />
       <Grid handleRowSelected={handleRowSelected} />
       <AddEditDialog
         dialogType={dialogType}
