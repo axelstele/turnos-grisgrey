@@ -6,11 +6,16 @@ import {
 import Today from '@material-ui/icons/Today';
 import Group from '@material-ui/icons/Group';
 import PanToolIcon from '@material-ui/icons/PanTool';
+import Face from '@material-ui/icons/Face';
 import { openDrawerSelector } from 'redux/selectors/global';
 import { global } from 'redux/reducers/global';
 import { Link, useHistory } from 'react-router-dom';
-import { HOME_PATHNAME, PRACTICES_PATHNAME, PROFESSIONALS_PATHNAME } from 'constants/routes';
-import { CALENDAR_TEXT, PRACTICES_TEXT, PROFESSIONALS_TEXT } from 'constants/custom-drawer';
+import {
+  HOME_PATHNAME, PATIENTS_PATHNAME, PRACTICES_PATHNAME, PROFESSIONALS_PATHNAME,
+} from 'constants/routes';
+import {
+  CALENDAR_TEXT, PATIENTS_TEXT, PRACTICES_TEXT, PROFESSIONALS_TEXT,
+} from 'constants/custom-drawer';
 
 import useStyles from './styles';
 
@@ -43,7 +48,9 @@ const CustomDrawer = () => {
             selected={history?.location.pathname === HOME_PATHNAME}
             to={HOME_PATHNAME}
           >
-            <ListItemIcon><Today /></ListItemIcon>
+            <ListItemIcon>
+              <Today />
+            </ListItemIcon>
             <ListItemText primary={CALENDAR_TEXT} />
           </ListItem>
           <ListItem
@@ -52,7 +59,9 @@ const CustomDrawer = () => {
             selected={history?.location.pathname === PROFESSIONALS_PATHNAME}
             to={PROFESSIONALS_PATHNAME}
           >
-            <ListItemIcon><Group /></ListItemIcon>
+            <ListItemIcon>
+              <Group />
+            </ListItemIcon>
             <ListItemText primary={PROFESSIONALS_TEXT} />
           </ListItem>
           <ListItem
@@ -61,8 +70,21 @@ const CustomDrawer = () => {
             selected={history?.location.pathname === PRACTICES_PATHNAME}
             to={PRACTICES_PATHNAME}
           >
-            <ListItemIcon><PanToolIcon /></ListItemIcon>
+            <ListItemIcon>
+              <PanToolIcon />
+            </ListItemIcon>
             <ListItemText primary={PRACTICES_TEXT} />
+          </ListItem>
+          <ListItem
+            button
+            component={Link}
+            selected={history?.location.pathname === PATIENTS_PATHNAME}
+            to={PATIENTS_PATHNAME}
+          >
+            <ListItemIcon>
+              <Face />
+            </ListItemIcon>
+            <ListItemText primary={PATIENTS_TEXT} />
           </ListItem>
         </List>
       </div>

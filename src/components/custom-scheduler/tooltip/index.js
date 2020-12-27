@@ -4,6 +4,7 @@ import Lens from '@material-ui/icons/Lens';
 import AccessTime from '@material-ui/icons/AccessTime';
 import { Chip, Grid } from '@material-ui/core';
 import { useSelector, shallowEqual } from 'react-redux';
+import { formattedDataSelector as formattedPatientsDataSelector } from 'redux/selectors/patients';
 import { formattedDataSelector as formattedPracticesDataSelector } from 'redux/selectors/practices';
 import { formattedDataSelector as formattedProfessionalsDataSelector } from 'redux/selectors/professionals';
 import classNames from 'clsx';
@@ -14,19 +15,23 @@ import useStyles from './styles';
 
 const Tooltip = ({
   appointmentData: {
-    endDate, startDate, professional, title, practices,
+    endDate, startDate, patient, professional, practices,
   }, formatDate,
 }) => {
   const allPractices = useSelector(formattedPracticesDataSelector, shallowEqual);
+  const patients = useSelector(formattedPatientsDataSelector, shallowEqual);
   const professionals = useSelector(formattedProfessionalsDataSelector, shallowEqual);
-  const [professionalSelected, setProfessionalSelected] = useState(null);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedProfessional, setSelectedProfessional] = useState(null);
 
   useEffect(() => {
     const foundProfessional = professionals?.find((item) => item.id === professional);
-    setProfessionalSelected(foundProfessional);
+    setSelectedProfessional(foundProfessional);
+    const foundPatient = patients?.find((item) => item.id === patient);
+    setSelectedPatient(foundPatient);
   }, [professionals]);
 
-  const classes = useStyles({ color: professionalSelected?.color });
+  const classes = useStyles({ color: selectedProfessional?.color });
 
   return (
     <div className={classes.content}>
@@ -36,7 +41,9 @@ const Tooltip = ({
         </Grid>
         <Grid item xs={10}>
           <div className={classNames(classes.title, classes.dateAndTitle)}>
-            {title}
+            {selectedPatient?.name}
+            {' '}
+            {selectedPatient?.surname}
           </div>
           <div className={classNames(classes.text, classes.dateAndTitle)}>
             {formatDate(startDate, { day: 'numeric', weekday: 'long' })}
@@ -64,7 +71,7 @@ const Tooltip = ({
         </Grid>
         <Grid item xs={10}>
           <span className={classes.text}>
-            {`${professionalSelected?.name} ${professionalSelected?.surname}`}
+            {`${selectedProfessional?.name} ${selectedProfessional?.surname}`}
           </span>
         </Grid>
       </Grid>
@@ -95,10 +102,10 @@ const Tooltip = ({
 Tooltip.propTypes = {
   appointmentData: PropTypes.shape({
     endDate: PropTypes.string,
+    patient: PropTypes.string,
     practices: PropTypes.arrayOf(PropTypes.string),
     professional: PropTypes.string,
     startDate: PropTypes.number,
-    title: PropTypes.string,
   }),
   formatDate: PropTypes.func,
 };

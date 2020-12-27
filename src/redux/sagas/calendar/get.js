@@ -4,6 +4,7 @@ import {
 import { calendar } from 'redux/reducers/calendar';
 import { appointments } from 'redux/reducers/appointments';
 import { callGetAppointments } from 'redux/sagas/appointments/get';
+import { callGetPatients } from 'redux/sagas/patients/get';
 import { callGetProfessionals } from 'redux/sagas/professionals/get';
 import { callGetPractices } from 'redux/sagas/practices/get';
 import { global } from 'redux/reducers/global';
@@ -13,6 +14,7 @@ function* callGetCalendar() {
   try {
     yield all([
       call(callGetAppointments),
+      call(callGetPatients),
       call(callGetProfessionals),
       call(callGetPractices),
     ]);

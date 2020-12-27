@@ -18,6 +18,6 @@ function* callSyncAppointments() {
   }
 }
 
-export default function* watchGetAppointments() {
+export default function* watchSyncAppointments() {
   yield all([takeLatest(appointments.sync.type, callSyncAppointments)]);
 }

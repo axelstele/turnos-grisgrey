@@ -6,7 +6,6 @@ import {
   IconButton, TextField, Button, MenuItem,
 } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
-import Create from '@material-ui/icons/Create';
 import CalendarToday from '@material-ui/icons/CalendarToday';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
@@ -15,17 +14,18 @@ import moment from 'moment';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { appointments } from 'redux/reducers/appointments';
 import Person from '@material-ui/icons/Person';
+import Face from '@material-ui/icons/Face';
+import { formattedDataSelector as formattedPatientsDataSelector } from 'redux/selectors/patients';
 import { formattedDataSelector as formattedPracticesDataSelector } from 'redux/selectors/practices';
 import { formattedDataSelector as formattedProfessionalsDataSelector } from 'redux/selectors/professionals';
-
 import {
   CREATE_BUTTON_TEXT,
   DESCRIPTION_TEXT,
   END_DATE_TEXT,
+  PATIENTS_TEXT,
   PRACTICES_TEXT,
   PROFESSIONAL_TEXT,
   START_DATE_TEXT,
-  TITLE_TEXT,
   UPDATE_BUTTON_TEXT,
 } from 'constants/home';
 import PanToolIcon from '@material-ui/icons/PanTool';
@@ -34,7 +34,7 @@ import useStyles from './styles';
 
 const CustomOverlay = ({
   appointmentData: {
-    id, startDate, endDate, title, practices, professional, description,
+    id, startDate, endDate, patient, practices, professional, description,
   }, handleClose, target, visible,
 }) => {
   const classes = useStyles();
@@ -43,8 +43,9 @@ const CustomOverlay = ({
   const [selectedProfessional, setSelectedProfessional] = useState(professional || '');
   const [formStartDate, setFormStartDate] = useState(startDate);
   const [formEndDate, setFormEndDate] = useState(endDate);
-  const [formTitle, setFormTitle] = useState(title || '');
+  const [selectedPatient, setSelectedPatient] = useState(patient || '');
   const [formDescription, setFormDescription] = useState(description || '');
+  const patientsData = useSelector(formattedPatientsDataSelector, shallowEqual);
   const practicesData = useSelector(formattedPracticesDataSelector, shallowEqual);
   const professionalsData = useSelector(formattedProfessionalsDataSelector, shallowEqual);
 
@@ -52,19 +53,19 @@ const CustomOverlay = ({
     if (id) {
       dispatch(appointments.update({
         id,
-        title: formTitle,
         startDate: formStartDate,
         endDate: formEndDate,
         description: formDescription,
+        patient: selectedPatient,
         professional: selectedProfessional,
         practices: selectedPractices,
       }));
     } else {
       dispatch(appointments.save({
-        title: formTitle,
         startDate: formStartDate,
         endDate: formEndDate,
         description: formDescription,
+        patient: selectedPatient,
         professional: selectedProfessional,
         practices: selectedPractices,
       }));
@@ -84,8 +85,8 @@ const CustomOverlay = ({
     setSelectedProfessional(value);
   };
 
-  const handleTitleChange = ({ target: { value } }) => {
-    setFormTitle(value);
+  const handlePatientChange = ({ target: { value } }) => {
+    setSelectedPatient(value);
   };
 
   const pickerEditorProps = (field) => ({
@@ -103,6 +104,9 @@ const CustomOverlay = ({
   });
 
   useEffect(() => {
+    if (!selectedPatient && patientsData?.length) {
+      setSelectedPatient(patientsData[0].id);
+    }
     if (!selectedProfessional && professionalsData?.length) {
       setSelectedProfessional(professionalsData[0].id);
     }
@@ -128,12 +132,21 @@ const CustomOverlay = ({
       </div>
       <div className={classes.content}>
         <div className={classes.wrapper}>
-          <Create className={classes.icon} color="action" />
+          <Face className={classes.icon} color="action" />
           <TextField
-            value={formTitle}
-            onChange={handleTitleChange}
-            {...textEditorProps(TITLE_TEXT)}
-          />
+            select
+            value={selectedPatient}
+            onChange={handlePatientChange}
+            {...textEditorProps(PATIENTS_TEXT)}
+          >
+            {sortAlphabeticallyByField(patientsData, 'surname')?.map((item) => (
+              <MenuItem value={item.id} key={item.id}>
+                {item.name}
+                {' '}
+                {item.surname}
+              </MenuItem>
+            ))}
+          </TextField>
         </div>
         <div className={classes.wrapper}>
           <Person className={classes.icon} color="action" />
@@ -198,7 +211,7 @@ const CustomOverlay = ({
         <Button
           className={classes.button}
           color="primary"
-          disabled={!formStartDate || !formEndDate || !formTitle}
+          disabled={!formStartDate || !formEndDate || !selectedPatient}
           onClick={handleCommitChanges}
           variant="outlined"
         >
@@ -222,6 +235,7 @@ CustomOverlay.propTypes = {
       PropTypes.string,
     ]),
     description: PropTypes.string,
+    patient: PropTypes.string,
     practices: PropTypes.arrayOf(PropTypes.string),
     professional: PropTypes.string,
     title: PropTypes.string,
