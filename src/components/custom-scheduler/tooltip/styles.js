@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: 0,
     backgroundColor: theme.palette.background.paper,
     boxSizing: 'border-box',
-    width: '400px',
   },
   contentContainer: {
     paddingBottom: theme.spacing(1.5),

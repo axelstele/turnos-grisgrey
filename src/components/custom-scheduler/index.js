@@ -19,12 +19,11 @@ import { connectProps } from '@devexpress/dx-react-core';
 import { calendar } from 'redux/reducers/calendar';
 import { formattedDataSelector } from 'redux/selectors/appointments';
 import { appointments } from 'redux/reducers/appointments';
-import {
-  DAY_VIEW_TEXT, WEEK_VIEW_TEXT, CANCEL_DELETE_TEXT, MESSAGE_DELETE_TEXT, CONFIRM_DELETE_TEXT,
-} from 'constants/custom-scheduler';
+import { DAY_VIEW_TEXT, WEEK_VIEW_TEXT } from 'constants/custom-scheduler';
 import CustomOverlay from './custom-overlay';
 import Tooltip from './tooltip';
 import Appointment from './appointment';
+import ConfirmationDialogLayout from './confirmation-dialog-layout';
 
 const CustomScheduler = () => {
   const dispatch = useDispatch();
@@ -56,6 +55,7 @@ const CustomScheduler = () => {
     <Paper>
       <Scheduler
         data={appointmentsData}
+        firstDayOfWeek={1}
         locale="es-AR"
       >
         <EditingState
@@ -80,13 +80,7 @@ const CustomScheduler = () => {
         />
         <Toolbar />
         <ViewSwitcher />
-        <ConfirmationDialog
-          messages={{
-            cancelButton: CANCEL_DELETE_TEXT,
-            confirmDeleteMessage: MESSAGE_DELETE_TEXT,
-            deleteButton: CONFIRM_DELETE_TEXT,
-          }}
-        />
+        <ConfirmationDialog layoutComponent={ConfirmationDialogLayout} />
         <Appointments
           appointmentComponent={Appointment}
         />

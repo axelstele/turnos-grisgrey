@@ -84,7 +84,7 @@ const Tooltip = ({
           <PanToolIcon color="action" />
         </Grid>
         <Grid item xs={10}>
-          <span className={classNames(classes.text, classes.colorfulContent)}>
+          <div className={classNames(classes.text, classes.colorfulContent)}>
             {getPracticesFullData(allPractices, practices)?.map((item) => (
               <Chip
                 className={classes.chip}
@@ -92,7 +92,7 @@ const Tooltip = ({
                 label={item.description}
               />
             ))}
-          </span>
+          </div>
         </Grid>
       </Grid>
     </div>
