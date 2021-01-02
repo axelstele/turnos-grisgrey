@@ -4,9 +4,10 @@ import {
 import { calendar } from 'redux/reducers/calendar';
 import { appointments } from 'redux/reducers/appointments';
 import { callGetAppointments } from 'redux/sagas/appointments/get';
+import { callGetHolidays } from 'redux/sagas/holidays/get';
 import { callGetPatients } from 'redux/sagas/patients/get';
-import { callGetProfessionals } from 'redux/sagas/professionals/get';
 import { callGetPractices } from 'redux/sagas/practices/get';
+import { callGetProfessionals } from 'redux/sagas/professionals/get';
 import { global } from 'redux/reducers/global';
 
 function* callGetCalendar() {
@@ -17,6 +18,7 @@ function* callGetCalendar() {
       call(callGetPatients),
       call(callGetProfessionals),
       call(callGetPractices),
+      call(callGetHolidays),
     ]);
   } catch {
     // TODO handle error

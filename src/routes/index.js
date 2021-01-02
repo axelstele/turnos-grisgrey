@@ -6,12 +6,18 @@ import {
 import Login from 'views/login';
 import PrivateRoute from 'views/private';
 import NotFound from 'views/not-found';
+import Holidays from 'views/holidays';
 import Home from 'views/home';
 import Patients from 'views/patients';
 import Professionals from 'views/professionals';
 import Practices from 'views/practices';
 import {
-  LOGIN_PATHNAME, HOME_PATHNAME, PATIENTS_PATHNAME, PRACTICES_PATHNAME, PROFESSIONALS_PATHNAME,
+  LOGIN_PATHNAME,
+  HOME_PATHNAME,
+  HOLIDAYS_PATHNAME,
+  PATIENTS_PATHNAME,
+  PRACTICES_PATHNAME,
+  PROFESSIONALS_PATHNAME,
 } from 'constants/routes';
 
 const Routes = () => (
@@ -21,6 +27,7 @@ const Routes = () => (
     <PrivateRoute exact path={PROFESSIONALS_PATHNAME} component={Professionals} />
     <PrivateRoute exact path={PRACTICES_PATHNAME} component={Practices} />
     <PrivateRoute exact path={PATIENTS_PATHNAME} component={Patients} />
+    <PrivateRoute exact path={HOLIDAYS_PATHNAME} component={Holidays} />
     <Route component={NotFound} />
   </Switch>
 );

@@ -31,6 +31,7 @@ import {
 import PanToolIcon from '@material-ui/icons/PanTool';
 import sortAlphabeticallyByField from 'utils/arrays';
 import useStyles from './styles';
+import 'moment/locale/es';
 
 const CustomOverlay = ({
   appointmentData: {
@@ -165,7 +166,7 @@ const CustomOverlay = ({
         </div>
         <div className={classes.wrapper}>
           <CalendarToday className={classes.icon} color="action" />
-          <MuiPickersUtilsProvider utils={MomentUtils}>
+          <MuiPickersUtilsProvider locale="es" utils={MomentUtils}>
             <DateTimePicker
               value={moment(formStartDate)}
               onChange={setFormStartDate}

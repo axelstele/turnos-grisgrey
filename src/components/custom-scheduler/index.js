@@ -24,6 +24,8 @@ import CustomOverlay from './custom-overlay';
 import Tooltip from './tooltip';
 import Appointment from './appointment';
 import ConfirmationDialogLayout from './confirmation-dialog-layout';
+import WeekViewTimeTableCell from './time-table-cell/week-view';
+import DayViewTimeTableCell from './time-table-cell/day-view';
 
 const CustomScheduler = () => {
   const dispatch = useDispatch();
@@ -69,14 +71,18 @@ const CustomScheduler = () => {
           defaultCurrentViewName={WEEK_VIEW_TEXT}
         />
         <DayView
+          cellDuration={60}
           endDayHour={20}
           name={DAY_VIEW_TEXT}
           startDayHour={8}
+          timeTableCellComponent={DayViewTimeTableCell}
         />
         <WeekView
+          cellDuration={60}
           endDayHour={20}
           name={WEEK_VIEW_TEXT}
           startDayHour={8}
+          timeTableCellComponent={WeekViewTimeTableCell}
         />
         <Toolbar />
         <ViewSwitcher />

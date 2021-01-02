@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect';
 import keysWithId from 'utils/objects';
 
-export const patientsSelector = ({ patients }) => patients;
+export const holidaysSelector = ({ holidays }) => holidays;
 
 export const dataSelector = createSelector(
-  patientsSelector,
-  (patients) => patients?.data,
+  holidaysSelector,
+  (holidays) => holidays?.data,
 );
 
 export const formattedDataSelector = createSelector(

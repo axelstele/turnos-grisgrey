@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import keysWithId from 'utils/objects';
 
 export const appointmentsSelector = ({ appointments }) => appointments;
 
@@ -10,15 +11,10 @@ export const dataSelector = createSelector(
 export const formattedDataSelector = createSelector(
   dataSelector,
   (data) => {
-    const parsedAppointments = data && Object.keys(data).reduce((acc, id) => {
-      const appointment = {
-        ...data[id],
-        id,
-      };
-      return [...acc, appointment];
-    }, []);
+    const appointments = keysWithId(data);
 
-    // eslint-disable-next-line max-len
-    return parsedAppointments?.map((appointment) => ({ ...appointment, startDate: Date.parse(appointment.startDate) }));
+    return appointments?.map(
+      (appointment) => ({ ...appointment, startDate: Date.parse(appointment.startDate) }),
+    );
   },
 );

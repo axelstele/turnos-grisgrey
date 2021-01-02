@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import keysWithId from 'utils/objects';
 
 export const practicesSelector = ({ practices }) => practices;
 
@@ -9,11 +10,5 @@ export const dataSelector = createSelector(
 
 export const formattedDataSelector = createSelector(
   dataSelector,
-  (data) => Object.keys(data).reduce((acc, id) => {
-    const practices = {
-      ...data[id],
-      id,
-    };
-    return [...acc, practices];
-  }, []),
+  (data) => keysWithId(data),
 );
