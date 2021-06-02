@@ -91,7 +91,7 @@ const CustomOverlay = ({
   };
 
   const pickerEditorProps = (field) => ({
-    ampm: false,
+    ampm: true,
     className: classes.picker,
     format: 'DD/MM/YYYY HH:mm',
     label: field[0].toUpperCase() + field.slice(1),
@@ -140,7 +140,7 @@ const CustomOverlay = ({
             onChange={handlePatientChange}
             {...textEditorProps(PATIENTS_TEXT)}
           >
-            {sortAlphabeticallyByField(patientsData, 'surname')?.map((item) => (
+            {sortAlphabeticallyByField(patientsData, 'name')?.map((item) => (
               <MenuItem value={item.id} key={item.id}>
                 {item.name}
                 {' '}
@@ -168,13 +168,13 @@ const CustomOverlay = ({
           <CalendarToday className={classes.icon} color="action" />
           <MuiPickersUtilsProvider locale="es" utils={MomentUtils}>
             <DateTimePicker
-              value={moment(formStartDate)}
               onChange={setFormStartDate}
+              value={moment(formStartDate)}
               {...pickerEditorProps(START_DATE_TEXT)}
             />
             <DateTimePicker
-              value={moment(formEndDate)}
               onChange={setFormEndDate}
+              value={moment(formEndDate)}
               {...pickerEditorProps(END_DATE_TEXT)}
             />
           </MuiPickersUtilsProvider>
