@@ -1,10 +1,13 @@
 import { makeStyles, fade } from '@material-ui/core/styles';
+import { blueGrey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   appointment: {
-    backgroundColor: ({ color }) => color && fade(color, 1),
+    backgroundColor: ({ blocked, color }) => (blocked ? blueGrey[500] : color)
+      && fade(blocked ? blueGrey[500] : color, 1),
     '&:hover': {
-      backgroundColor: ({ color }) => color && fade(color, 0.85),
+      backgroundColor: ({ blocked, color }) => (blocked ? blueGrey[500] : color)
+        && fade(blocked ? blueGrey[500] : color, 0.85),
     },
   },
   container: {

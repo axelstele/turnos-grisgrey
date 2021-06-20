@@ -8,8 +8,9 @@ import rsf from '../../rsf';
 
 function* callSaveAppointment({ payload }) {
   const {
-    endDate, startDate, description, patient, professional, practices,
+    blocked, endDate, startDate, description, patient, professional, practices,
   } = payload;
+  console.log(endDate);
   try {
     yield put(global.showLoader());
     let parsedStartDate = startDate;
@@ -21,6 +22,7 @@ function* callSaveAppointment({ payload }) {
       parsedEndDate = moment(endDate).toDate();
     }
     yield call(rsf.database.create, 'appointments', {
+      blocked,
       startDate: parsedStartDate.toUTCString(),
       endDate: parsedEndDate.toUTCString(),
       description,

@@ -11,11 +11,12 @@ import classNames from 'clsx';
 import Person from '@material-ui/icons/Person';
 import getPracticesFullData from 'utils/practices';
 import PanToolIcon from '@material-ui/icons/PanTool';
+import { NOT_AVAILABLE } from 'constants/home';
 import useStyles from './styles';
 
 const Tooltip = ({
   appointmentData: {
-    endDate, startDate, patient, professional, practices,
+    endDate, startDate, patient, professional, practices, blocked,
   }, formatDate,
 }) => {
   const allPractices = useSelector(formattedPracticesDataSelector, shallowEqual);
@@ -31,7 +32,7 @@ const Tooltip = ({
     setSelectedPatient(foundPatient);
   }, [professionals]);
 
-  const classes = useStyles({ color: selectedProfessional?.color });
+  const classes = useStyles({ blocked, color: selectedProfessional?.color });
 
   return (
     <div className={classes.content}>
@@ -41,9 +42,7 @@ const Tooltip = ({
         </Grid>
         <Grid item xs={10}>
           <div className={classNames(classes.title, classes.dateAndTitle)}>
-            {selectedPatient?.name}
-            {' '}
-            {selectedPatient?.surname}
+            {blocked ? NOT_AVAILABLE : `${selectedPatient?.name} ${selectedPatient?.surname}`}
           </div>
           <div className={classNames(classes.text, classes.dateAndTitle)}>
             {formatDate(startDate, { day: 'numeric', weekday: 'long' })}
@@ -75,6 +74,7 @@ const Tooltip = ({
           </span>
         </Grid>
       </Grid>
+      {!blocked && (
       <Grid container alignItems="center" className={classes.contentContainer}>
         <Grid
           className={classNames(classes.contentItemIcon, classes.icon, classes.colorfulContent)}
@@ -95,12 +95,14 @@ const Tooltip = ({
           </div>
         </Grid>
       </Grid>
+      )}
     </div>
   );
 };
 
 Tooltip.propTypes = {
   appointmentData: PropTypes.shape({
+    blocked: PropTypes.bool,
     endDate: PropTypes.string,
     patient: PropTypes.string,
     practices: PropTypes.arrayOf(PropTypes.string),

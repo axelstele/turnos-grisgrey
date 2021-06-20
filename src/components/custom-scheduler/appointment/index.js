@@ -5,10 +5,10 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { formattedDataSelector as formattedPatientsDataSelector } from 'redux/selectors/patients';
 import { formattedDataSelector as formattedProfessionalsDataSelector } from 'redux/selectors/professionals';
 import moment from 'moment';
+import { NOT_AVAILABLE } from 'constants/home';
 import useStyles from './styles';
 
-const Appointment = ({ data, ...restProps }) => {
-  const { patient, professional } = data;
+const Appointment = ({ data, data: { blocked, patient, professional }, ...restProps }) => {
   const patients = useSelector(formattedPatientsDataSelector, shallowEqual);
   const professionals = useSelector(formattedProfessionalsDataSelector, shallowEqual);
   const [selectedProfessional, setSelectedProfessional] = useState(null);
@@ -21,7 +21,7 @@ const Appointment = ({ data, ...restProps }) => {
     setSelectedPatient(foundPatient);
   }, [professionals, patient]);
 
-  const classes = useStyles({ color: selectedProfessional?.color });
+  const classes = useStyles({ blocked, color: selectedProfessional?.color });
 
   return (
     <>
@@ -29,14 +29,12 @@ const Appointment = ({ data, ...restProps }) => {
       <Appointments.Appointment {...restProps} className={classes.appointment} data={data}>
         <div className={classes.container}>
           <div className={classes.title}>
-            {selectedPatient?.name}
-            {' '}
-            {selectedPatient?.surname}
+            {blocked ? NOT_AVAILABLE : `${selectedPatient?.name} ${selectedPatient?.surname}`}
           </div>
           <span>
-            {data?.startDate && moment(data.startDate).format('hh:mm')}
+            {data?.startDate && moment(data.startDate).format('HH:mm')}
             {' - '}
-            {data?.endDate && moment(data.endDate).format('hh:mm')}
+            {data?.endDate && moment(data.endDate).format('HH:mm')}
           </span>
         </div>
       </Appointments.Appointment>
@@ -46,6 +44,7 @@ const Appointment = ({ data, ...restProps }) => {
 
 Appointment.propTypes = {
   data: PropTypes.shape({
+    blocked: PropTypes.bool,
     endDate: PropTypes.string,
     patient: PropTypes.string,
     professional: PropTypes.string,

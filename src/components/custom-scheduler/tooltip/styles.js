@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { blueGrey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   chip: {
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.action.active,
   },
   colorfulContent: {
-    color: ({ color }) => color,
+    color: ({ blocked, color }) => (blocked ? blueGrey[500] : color),
   },
   lens: {
     width: theme.spacing(4.5),

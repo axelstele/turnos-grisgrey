@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
 import {
-  IconButton, TextField, Button, MenuItem,
+  IconButton, TextField, Button, MenuItem, Checkbox, FormControlLabel,
 } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 import CalendarToday from '@material-ui/icons/CalendarToday';
@@ -27,6 +27,7 @@ import {
   PROFESSIONAL_TEXT,
   START_DATE_TEXT,
   UPDATE_BUTTON_TEXT,
+  BLOCK_TIME_ONLY,
 } from 'constants/home';
 import PanToolIcon from '@material-ui/icons/PanTool';
 import sortAlphabeticallyByField from 'utils/arrays';
@@ -35,11 +36,12 @@ import 'moment/locale/es';
 
 const CustomOverlay = ({
   appointmentData: {
-    id, startDate, endDate, patient, practices, professional, description,
+    id, blocked, startDate, endDate, patient, practices, professional, description,
   }, handleClose, target, visible,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [formBlocked, setFormBlocked] = useState(blocked || false);
   const [selectedPractices, setSelectedPractices] = useState(practices || []);
   const [selectedProfessional, setSelectedProfessional] = useState(professional || '');
   const [formStartDate, setFormStartDate] = useState(startDate);
@@ -54,6 +56,7 @@ const CustomOverlay = ({
     if (id) {
       dispatch(appointments.update({
         id,
+        blocked: formBlocked,
         startDate: formStartDate,
         endDate: formEndDate,
         description: formDescription,
@@ -63,6 +66,7 @@ const CustomOverlay = ({
       }));
     } else {
       dispatch(appointments.save({
+        blocked: formBlocked,
         startDate: formStartDate,
         endDate: formEndDate,
         description: formDescription,
@@ -72,6 +76,16 @@ const CustomOverlay = ({
       }));
     }
     handleClose();
+  };
+
+  const handleBlockedChange = ({ target: { checked } }) => {
+    setFormBlocked(checked);
+    if (checked) {
+      setSelectedPatient('');
+      setSelectedPractices([]);
+    } else if (patientsData?.length) {
+      setSelectedPatient(patientsData[0].id);
+    }
   };
 
   const handleDescriptionChange = ({ target: { value } }) => {
@@ -105,7 +119,7 @@ const CustomOverlay = ({
   });
 
   useEffect(() => {
-    if (!selectedPatient && patientsData?.length) {
+    if (!formBlocked && !selectedPatient && patientsData?.length) {
       setSelectedPatient(patientsData[0].id);
     }
     if (!selectedProfessional && professionalsData?.length) {
@@ -133,8 +147,21 @@ const CustomOverlay = ({
       </div>
       <div className={classes.content}>
         <div className={classes.wrapper}>
+          <FormControlLabel
+            control={(
+              <Checkbox
+                checked={formBlocked}
+                color="primary"
+                onChange={handleBlockedChange}
+              />
+        )}
+            label={BLOCK_TIME_ONLY}
+          />
+        </div>
+        <div className={classes.wrapper}>
           <Face className={classes.icon} color="action" />
           <TextField
+            disabled={formBlocked}
             select
             value={selectedPatient}
             onChange={handlePatientChange}
@@ -173,6 +200,10 @@ const CustomOverlay = ({
               {...pickerEditorProps(START_DATE_TEXT)}
             />
             <DateTimePicker
+              minDate={moment(formStartDate)}
+              minDateMessage="Día/hora de finalización no puede ser anterior a día/hora de inicio"
+              maxDate={moment(formStartDate).endOf('day')}
+              strictCompareDates
               onChange={setFormEndDate}
               value={moment(formEndDate)}
               {...pickerEditorProps(END_DATE_TEXT)}
@@ -182,6 +213,7 @@ const CustomOverlay = ({
         <div className={classes.wrapper}>
           <PanToolIcon className={classes.icon} color="action" />
           <TextField
+            disabled={formBlocked}
             select
             SelectProps={{
               multiple: true,
@@ -212,9 +244,10 @@ const CustomOverlay = ({
         <Button
           className={classes.button}
           color="primary"
-          disabled={!formStartDate || !formEndDate || !selectedPatient}
+          disabled={(!formBlocked && (!formStartDate || !formEndDate || !selectedPatient))
+            || moment(formEndDate).isBefore(moment(formStartDate))}
           onClick={handleCommitChanges}
-          variant="outlined"
+          variant="contained"
         >
           {id ? UPDATE_BUTTON_TEXT : CREATE_BUTTON_TEXT}
         </Button>
@@ -226,6 +259,7 @@ const CustomOverlay = ({
 CustomOverlay.propTypes = {
   appointmentData: PropTypes.shape({
     id: PropTypes.string,
+    blocked: PropTypes.bool,
     startDate: PropTypes.oneOfType([
       PropTypes.instanceOf(Date),
       PropTypes.number,
