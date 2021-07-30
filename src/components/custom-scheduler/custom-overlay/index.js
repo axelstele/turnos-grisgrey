@@ -200,8 +200,8 @@ const CustomOverlay = ({
               {...pickerEditorProps(START_DATE_TEXT)}
             />
             <DateTimePicker
-              minDate={moment(formStartDate)}
-              minDateMessage="Día/hora de finalización no puede ser anterior a día/hora de inicio"
+              minDate={moment(formStartDate).add(1, 'minutes')}
+              minDateMessage="Fin debe ser posterior a inicio"
               maxDate={moment(formStartDate).endOf('day')}
               strictCompareDates
               onChange={setFormEndDate}
@@ -245,7 +245,7 @@ const CustomOverlay = ({
           className={classes.button}
           color="primary"
           disabled={(!formBlocked && (!formStartDate || !formEndDate || !selectedPatient))
-            || moment(formEndDate).isBefore(moment(formStartDate))}
+            || moment(formEndDate).isSameOrBefore(moment(formStartDate))}
           onClick={handleCommitChanges}
           variant="contained"
         >

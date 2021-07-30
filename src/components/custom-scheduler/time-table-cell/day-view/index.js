@@ -3,16 +3,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, shallowEqual } from 'react-redux';
 import { DayView } from '@devexpress/dx-react-scheduler-material-ui';
-import { formattedDataSelector } from 'redux/selectors/holidays';
+import { dataSelector } from 'redux/selectors/holidays';
 import moment from 'moment';
 import { Tooltip } from '@material-ui/core';
 import useStyles from '../styles';
 
-const WeekViewTimeTableCell = ({ startDate, ...restProps }) => {
+const DayViewTimeTableCell = ({ startDate, ...restProps }) => {
   const classes = useStyles();
-  const holidaysData = useSelector(formattedDataSelector, shallowEqual);
+  const holidaysData = useSelector(dataSelector, shallowEqual);
 
-  const holiday = holidaysData?.find((item) => item.date === moment(startDate).format('DD/MM/YYYY'));
+  const day = moment(startDate).date();
+  const month = moment(startDate).month();
+  const year = moment(startDate).year();
+  const holiday = holidaysData[year]?.[month]?.[day];
 
   if (!holiday) {
     return <DayView.TimeTableCell {...restProps} />;
@@ -25,8 +28,8 @@ const WeekViewTimeTableCell = ({ startDate, ...restProps }) => {
   );
 };
 
-WeekViewTimeTableCell.propTypes = {
+DayViewTimeTableCell.propTypes = {
   startDate: PropTypes.instanceOf(Date),
 };
 
-export default WeekViewTimeTableCell;
+export default DayViewTimeTableCell;
